@@ -1,0 +1,97 @@
+# Subsistemas complejos
+class Pedidos:
+    def realizar_pedido(self, cliente, pedido):
+        print(f"El cliente {cliente} realizó el pedido: {pedido}")
+
+class Pagos:
+    def procesar_pago(self, cliente, monto):
+        print(f"El cliente {cliente} pagó {monto}.")
+
+class Reservas:
+    def hacer_reserva(self, cliente, fecha, cantidad_personas):
+        print(f"El cliente {cliente} hizo una reserva para {cantidad_personas} personas el {fecha}.")
+
+class Inventario:
+    def actualizar_inventario(self, producto, cantidad):
+        print(f"Se actualizó el inventario de {producto} a {cantidad} unidades.")
+
+class Mesas:
+    def asignar_mesa(self, cliente, mesa):
+        print(f"Se asignó la mesa {mesa} al cliente {cliente}.")
+
+class Informes:
+    def generar_informe_venta(self):
+        print("Se generó un informe de ventas en tiempo real.")
+
+# Facade
+class RestauranteFacade:
+    def __init__(self):
+        self.pedidos = Pedidos()
+        self.pagos = Pagos()
+        self.reservas = Reservas()
+        self.inventario = Inventario()
+        self.mesas = Mesas()
+        self.informes = Informes()
+
+    def realizar_pedido(self):
+        cliente = input("Ingrese el nombre del cliente: ")
+        pedido = input("Ingrese el pedido: ")
+        self.pedidos.realizar_pedido(cliente, pedido)
+
+    def procesar_pago(self):
+        cliente = input("Ingrese el nombre del cliente: ")
+        monto = float(input("Ingrese el monto del pago: "))
+        self.pagos.procesar_pago(cliente, monto)
+
+    def hacer_reserva(self):
+        cliente = input("Ingrese el nombre del cliente: ")
+        fecha = input("Ingrese la fecha de la reserva: ")
+        cantidad_personas = int(input("Ingrese la cantidad de personas: "))
+        self.reservas.hacer_reserva(cliente, fecha, cantidad_personas)
+
+    def actualizar_inventario(self):
+        producto = input("Ingrese el nombre del producto: ")
+        cantidad = int(input("Ingrese la cantidad: "))
+        self.inventario.actualizar_inventario(producto, cantidad)
+
+    def asignar_mesa(self):
+        cliente = input("Ingrese el nombre del cliente: ")
+        mesa = int(input("Ingrese el número de mesa: "))
+        self.mesas.asignar_mesa(cliente, mesa)
+
+    def generar_informe_venta(self):
+        self.informes.generar_informe_venta()
+
+
+
+
+def realizar_pedido_y_pago(restaurante):
+    cliente = input("Ingrese su nombre: ")
+    print("Opciones de pedido:")
+    print("1. Hamburguesa")
+    print("2. Pizza")
+    print("3. Ensalada")
+    pedido_opcion = int(input("Seleccione una opción de pedido: "))
+
+    pedido = ""
+    if pedido_opcion == 1:
+        pedido = "Hamburguesa"
+    elif pedido_opcion == 2:
+        pedido = "Pizza"
+    elif pedido_opcion == 3:
+        pedido = "Ensalada"
+
+    restaurante.realizar_pedido(cliente, pedido)
+
+    monto = int(input("Ingrese el monto del pago: "))
+    restaurante.procesar_pago(cliente, monto)
+
+# Uso del Facade
+restaurante = RestauranteFacade()
+realizar_pedido_y_pago(restaurante)
+restaurante.realizar_pedido()
+restaurante.procesar_pago()
+restaurante.hacer_reserva()
+restaurante.actualizar_inventario()
+restaurante.asignar_mesa()
+restaurante.generar_informe_venta()
