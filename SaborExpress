@@ -1,6 +1,6 @@
 class Pedidos:
-    def recibir_pedido(self):
-        print("¡Bienvenido al menu! Por favor, seleccione los productos:")
+    def recibir_pedido_en_restaurante(self):
+        print("¡Bienvenido al menú! Por favor, seleccione los productos:")
 
         categorias = {
             "1": ("Comida", {
@@ -51,7 +51,7 @@ class Pedidos:
                 if opcion == "0":
                     break
                 elif opcion == "exit":
-                    print("\nPedido realizado:", pedido)
+                    print("\nPedido realizado en el restaurante:", pedido)
                     print("Total a pagar: $", total)
                     return pedido, total
                 elif opcion in productos:
@@ -60,11 +60,11 @@ class Pedidos:
                 else:
                     print("¡Opción inválida!")
 
-        print("\nPedido realizado:", pedido)
+        print("\nPedido realizado en el restaurante:", pedido)
         print("Total a pagar: $", total)
         return pedido, total
-    
-    
+
+
 class Pagos:
     def procesar_pago(self, total):
         monto_ingresado = int(input("Ingrese el monto a pagar: $"))
@@ -76,21 +76,26 @@ class Pagos:
         else:
             print("Pago exitoso. No hay cambio.")
 
+
 class Reservas:
     def hacer_reserva(self, fecha, hora, num_personas):
         print(f"Haciendo reserva para {num_personas} personas el {fecha} a las {hora}")
+
 
 class Inventario:
     def actualizar_inventario(self, producto, cantidad):
         print(f"Actualizando inventario: {producto} - {cantidad} unidades")
 
+
 class Mesas:
     def asignar_mesa(self, num_mesa, num_personas):
         print(f"Asignando mesa {num_mesa} para {num_personas} personas")
 
+
 class InformesVentas:
     def generar_informe_ventas(self):
         print("Generando informe de ventas en tiempo real")
+
 
 # Fachada
 
@@ -103,8 +108,8 @@ class SistemaRestauranteFacade:
         self.mesas = Mesas()
         self.informes_ventas = InformesVentas()
 
-    def realizar_pedido(self):
-        pedido, total = self.pedidos.recibir_pedido()
+    def realizar_pedido_en_restaurante(self):
+        pedido, total = self.pedidos.recibir_pedido_en_restaurante()
         self.pagos.procesar_pago(total)
 
     def hacer_reserva(self, fecha, hora, num_personas):
@@ -119,6 +124,7 @@ class SistemaRestauranteFacade:
     def generar_informe_ventas(self):
         self.informes_ventas.generar_informe_ventas()
 
+
 # Uso del sistema
 
 def main():
@@ -126,16 +132,16 @@ def main():
 
     while True:
         print("\nCategorías:")
-        print("1. Pedido")
-        print("2. Reserva")
-        print("3. Inventario")
-        print("4. Mesas")
+        print("1. Realizar Pedido")
+        print("2. Hacer Reserva")
+        print("3. Actualizar Inventario")
+        print("4. Asignar Mesas")
         print("0. Salir")
 
         opcion = input("Ingrese el número de la categoría (0 para salir): ")
 
         if opcion == "1":
-            sistema_restaurante.realizar_pedido()
+            sistema_restaurante.realizar_pedido_en_restaurante()
         elif opcion == "2":
             fecha = input("Ingrese la fecha de la reserva (formato YYYY-MM-DD): ")
             hora = input("Ingrese la hora de la reserva: ")
