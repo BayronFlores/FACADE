@@ -1,3 +1,32 @@
+class InterfazUsuario:
+    @staticmethod
+    def obtener_opcion(mensaje):
+        while True:
+            opcion = input(mensaje)
+            if opcion.isdigit():
+                return int(opcion)
+            print("¡Opción inválida!")
+
+    @staticmethod
+    def obtener_entero_positivo(mensaje):
+        while True:
+            valor = input(mensaje)
+            if valor.isdigit() and int(valor) > 0:
+                return int(valor)
+            print("¡Valor inválido!")
+
+    @staticmethod
+    def obtener_decimal_positivo(mensaje):
+        while True:
+            valor = input(mensaje)
+            try:
+                valor = float(valor)
+                if valor > 0:
+                    return valor
+                print("¡Valor inválido!")
+            except ValueError:
+                print("¡Valor inválido!")
+
 class Pedidos:
     def recibir_pedido_en_restaurante(self):
         print("¡Bienvenido al menú! Por favor, seleccione los productos:")
