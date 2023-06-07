@@ -29,7 +29,6 @@ class InterfazUsuario:
 
 class Pedidos:
     def recibir_pedido_en_restaurante(self):
-        print("¡Bienvenido al menú! Por favor, seleccione los productos:")
 
         categorias = {
             "1": ("Comida", {
@@ -53,15 +52,15 @@ class Pedidos:
                 "3": ("Jugo Natural", 1200)
             })
         }
-
         pedido = []
         total = 0
 
         while True:
-            print("\nCategorías:")
+            print("\n--------------MENÚ----------------")
             for codigo, (categoria, _) in categorias.items():
-                print(f"{codigo}. {categoria}")
-
+                print("◤-------------------------------◥")
+                print(f"----({codigo}). {categoria}")
+                print("◣-------------------------------◢")
             categoria_opcion = input("Ingrese el código de la categoría (0 para finalizar el pedido total): ")
             if categoria_opcion == "0":
                 break
@@ -73,8 +72,10 @@ class Pedidos:
 
             print("\nProductos:")
             for codigo, (producto, valor) in productos.items():
-                print(f"{codigo}. {producto} - ${valor}")
-
+                print("◤-------------------------------◥")
+                print(f"----({codigo}). {producto} - ${valor}")
+                print("◣-------------------------------◢")
+                
             while True:
                 opcion = input("Ingrese el código del producto (0 para finalizar la categoría, 'exit' para finalizar el pedido total): ")
                 if opcion == "0":
@@ -96,14 +97,14 @@ class Pedidos:
 
 class Pagos:
     def procesar_pago(self, total):
-        monto_ingresado = int(input("Ingrese el monto a pagar: $"))
-        if monto_ingresado < total:
-            print("¡Monto insuficiente!")
-        elif monto_ingresado > total:
-            cambio = monto_ingresado - total
-            print("Pago exitoso. Su cambio es: $", cambio)
-        else:
-            print("Pago exitoso. No hay cambio.")
+        while True:
+            monto_ingresado = int(input("Ingrese el monto a pagar: $"))
+            if monto_ingresado < total:
+                print("¡Monto insuficiente!")
+            elif monto_ingresado > total:
+                cambio = monto_ingresado - total
+                print("Pago exitoso. Su cambio es: $", cambio)
+                break
 
 
 class Reservas:
@@ -161,11 +162,13 @@ def main():
 
     while True:
         print("\nCategorías:")
-        print("1. Realizar Pedido")
-        print("2. Hacer Reserva")
-        print("3. Actualizar Inventario")
-        print("4. Asignar Mesas")
-        print("0. Salir")
+        print("◤-------------------------------◥")
+        print("---( 1 ). Realizar Pedido")
+        print("---( 2 ). Hacer Reserva")
+        print("---( 3 ). Actualizar Inventario")
+        print("---( 4 ). Asignar Mesas")
+        print("---( 0 ). Salir")
+        print("◣-------------------------------◢")
 
         opcion = input("Ingrese el número de la categoría (0 para salir): ")
 
