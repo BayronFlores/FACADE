@@ -1,36 +1,67 @@
 # # Subsistemas
 
 productos = {
-            "1": ("Pizza Margherita", 3000),
-            "2": ("Ensalada César", 2500),
-            "3": ("Refresco", 1000)
-        }
+    "comida": {
+        "1": ("Pizza Margherita", 3000),
+        "2": ("Hamburguesa", 3500),
+    },
+    "ensalada": {
+        "3": ("Ensalada César", 2500),
+        "4": ("Ensalada Caprese", 2800),
+    },
+    "postre": {
+        "5": ("Pastel de Chocolate", 3500),
+        "6": ("Helado", 2000),
+    },
+    "bebida": {
+        "7": ("Refresco", 1000),
+        "8": ("Agua Mineral", 500),
+    }
+}
+
+
 
 class Pedidos:
     def recibir_pedido(self):
-        print("¡Bienvenido! Por favor, seleccione los productos:")
+        print("¡Bienvenido! Por favor, seleccione una categoría:")
+        
+        categorias = list(productos.keys())
 
+        for i, categoria in enumerate(categorias, 1):
+            print(f"{i}. {categoria.capitalize()}")
+
+        while True:
+            opcion_categoria = input("Ingrese el número de la categoría: ")
+            if opcion_categoria.isdigit() and 1 <= int(opcion_categoria) <= len(categorias):
+                categoria_elegida = categorias[int(opcion_categoria) - 1]
+                break
+            else:
+                print("¡Opción inválida!")
+
+        print(f"\nProductos de la categoría {categoria_elegida.capitalize()}:")
+        productos_categoria = productos[categoria_elegida]
+        for codigo, (producto, valor) in productos_categoria.items():
+            print(f"{codigo}. {producto} - ${valor}")
 
         pedido = []
         total = 0
 
-        for codigo, (producto, valor) in productos.items():
-            print(f"{codigo}. {producto} - ${valor}")
-
         while True:
-            opcion = input("Ingrese el código del producto (0 para finalizar el pedido): ")
+            opcion = input("Ingrese el código del producto (0 para finalizar el pedido, S para seleccionar otra categoría): ")
             if opcion == "0":
                 break
-            elif opcion in productos:
-                pedido.append(productos[opcion][0])
-                total += productos[opcion][1]
+            elif opcion.lower() == "s":
+                return self.recibir_pedido()
+            elif opcion in productos_categoria:
+                pedido.append(productos_categoria[opcion][0])
+                total += productos_categoria[opcion][1]
             else:
                 print("¡Opción inválida!")
 
         print("Pedido realizado:", pedido)
         print("Total a pagar: $", total)
         return pedido, total
-
+"-------------------------------------------------------------------------------------------------"
 class Pagos:
     def procesar_pago(self, total):
         monto_ingresado = int(input("Ingrese el monto a pagar: $"))
@@ -41,25 +72,24 @@ class Pagos:
             print("Pago exitoso. Su cambio es: $", cambio)
         else:
             print("Pago exitoso. No hay cambio.")
-
+"-------------------------------------------------------------------------------------------------"
 class Reservas:
     def hacer_reserva(self, fecha, hora, num_personas):
         print(f"Haciendo reserva para {num_personas} personas el {fecha} a las {hora}")
-
+"-------------------------------------------------------------------------------------------------"
 class Inventario:
     def actualizar_inventario(self, producto, cantidad):
         print(f"Actualizando inventario: {producto} - {cantidad} unidades")
-
+"-------------------------------------------------------------------------------------------------"
 class Mesas:
     def asignar_mesa(self, num_mesa, num_personas):
         print(f"Asignando mesa {num_mesa} para {num_personas} personas")
-
+"-------------------------------------------------------------------------------------------------"
 class InformesVentas:
     def generar_informe_ventas(self):
         print("Generando informe de ventas en tiempo real")
-
+"-------------------------------------------------------------------------------------------------"
 # Fachada
-
 class SistemaRestauranteFacade:
     def __init__(self):
         self.pedidos = Pedidos()
@@ -84,9 +114,8 @@ class SistemaRestauranteFacade:
 
     def generar_informe_ventas(self):
         self.informes_ventas.generar_informe_ventas()
-
+"-------------------------------------------------------------------------------------------------"
 # Uso del sistema
-
 def main():
     sistema_restaurante = SistemaRestauranteFacade()
 
@@ -110,7 +139,6 @@ def main():
 
     # Realizar un pedido
     sistema_restaurante.realizar_pedido()
-
 
 if __name__ == '__main__':
     main()
