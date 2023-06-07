@@ -1,112 +1,116 @@
-class Pedidos:
-    def __init__(self):
-        self.precios = {
-            "Hamburguesa": 2000,
-            "Pizza": 1500,
-            "Ensalada": 1500
+# # Subsistemas
+
+productos = {
+            "1": ("Pizza Margherita", 3000),
+            "2": ("Ensalada César", 2500),
+            "3": ("Refresco", 1000)
         }
 
-    def realizar_pedido(self, cliente, pedido):
-        print(f"El cliente {cliente} realizó el pedido: {pedido}")
-        total = sum(self.precios[producto] for producto in pedido)
-        print(f"Total a pagar: {total}")
-        return total
+class Pedidos:
+    def recibir_pedido(self):
+        print("¡Bienvenido! Por favor, seleccione los productos:")
 
+
+        pedido = []
+        total = 0
+
+        for codigo, (producto, valor) in productos.items():
+            print(f"{codigo}. {producto} - ${valor}")
+
+        while True:
+            opcion = input("Ingrese el código del producto (0 para finalizar el pedido): ")
+            if opcion == "0":
+                break
+            elif opcion in productos:
+                pedido.append(productos[opcion][0])
+                total += productos[opcion][1]
+            else:
+                print("¡Opción inválida!")
+
+        print("Pedido realizado:", pedido)
+        print("Total a pagar: $", total)
+        return pedido, total
 
 class Pagos:
-    def procesar_pago(self, cliente, monto):
-        print(f"El cliente {cliente} pagó {monto}.")
-
+    def procesar_pago(self, total):
+        monto_ingresado = int(input("Ingrese el monto a pagar: $"))
+        if monto_ingresado < total:
+            print("¡Monto insuficiente!")
+        elif monto_ingresado > total:
+            cambio = monto_ingresado - total
+            print("Pago exitoso. Su cambio es: $", cambio)
+        else:
+            print("Pago exitoso. No hay cambio.")
 
 class Reservas:
-    def hacer_reserva(self, cliente, fecha, cantidad_personas):
-        print(f"El cliente {cliente} hizo una reserva para {cantidad_personas} personas el {fecha}.")
-
+    def hacer_reserva(self, fecha, hora, num_personas):
+        print(f"Haciendo reserva para {num_personas} personas el {fecha} a las {hora}")
 
 class Inventario:
     def actualizar_inventario(self, producto, cantidad):
-        print(f"Se actualizó el inventario de {producto} a {cantidad} unidades.")
-
+        print(f"Actualizando inventario: {producto} - {cantidad} unidades")
 
 class Mesas:
-    def asignar_mesa(self, cliente, mesa):
-        print(f"Se asignó la mesa {mesa} al cliente {cliente}.")
+    def asignar_mesa(self, num_mesa, num_personas):
+        print(f"Asignando mesa {num_mesa} para {num_personas} personas")
 
+class InformesVentas:
+    def generar_informe_ventas(self):
+        print("Generando informe de ventas en tiempo real")
 
-class Informes:
-    def generar_informe_venta(self):
-        print("Se generó un informe de ventas en tiempo real.")
+# Fachada
 
-
-# Facade
-class RestauranteFacade:
+class SistemaRestauranteFacade:
     def __init__(self):
         self.pedidos = Pedidos()
         self.pagos = Pagos()
         self.reservas = Reservas()
         self.inventario = Inventario()
         self.mesas = Mesas()
-        self.informes = Informes()
+        self.informes_ventas = InformesVentas()
 
-    def realizar_pedido(self, cliente, pedido):
-        total_pedido = self.pedidos.realizar_pedido(cliente, pedido)
-        return total_pedido
+    def realizar_pedido(self):
+        pedido, total = self.pedidos.recibir_pedido()
+        self.pagos.procesar_pago(total)
 
-    def procesar_pago(self, cliente, monto):
-        self.pagos.procesar_pago(cliente, monto)
-
-    def hacer_reserva(self, cliente, fecha, cantidad_personas):
-        self.reservas.hacer_reserva(cliente, fecha, cantidad_personas)
+    def hacer_reserva(self, fecha, hora, num_personas):
+        self.reservas.hacer_reserva(fecha, hora, num_personas)
 
     def actualizar_inventario(self, producto, cantidad):
         self.inventario.actualizar_inventario(producto, cantidad)
 
-    def asignar_mesa(self, cliente, mesa):
-        self.mesas.asignar_mesa(cliente, mesa)
+    def asignar_mesa(self, num_mesa, num_personas):
+        self.mesas.asignar_mesa(num_mesa, num_personas)
 
-    def generar_informe_venta(self):
-        self.informes.generar_informe_venta()
+    def generar_informe_ventas(self):
+        self.informes_ventas.generar_informe_ventas()
 
+# Uso del sistema
 
-def realizar_pedido_y_pago(restaurante):
-    cliente = input("Ingrese su nombre: ")
-    print("Opciones de pedido:")
-    print("1. Hamburguesa")
-    print("2. Pizza")
-    print("3. Ensalada")
-    print("0. Finalizar pedido")
+def main():
+    sistema_restaurante = SistemaRestauranteFacade()
 
-    pedido = []
-    opcion = -1
-    while opcion != 0 and opcion != "":
-        opcion = input("Seleccione una opción de pedido (0 para finalizar): ")
-        if opcion == "1":
-            pedido.append("Hamburguesa")
-        elif opcion == "2":
-            pedido.append("Pizza")
-        elif opcion == "3":
-            pedido.append("Ensalada")
+    # Hacer una reserva
+    fecha = "2023-06-07"
+    hora = "19:00"
+    num_personas = 4
+    sistema_restaurante.hacer_reserva(fecha, hora, num_personas)
 
-    total_pedido = restaurante.realizar_pedido(cliente, pedido)
+    # Actualizar el inventario
+    producto = "Tomate"
+    cantidad = 10
+    sistema_restaurante.actualizar_inventario(producto, cantidad)
 
-    monto = int(input("Ingrese el monto del pago: "))
+    # Asignar una mesa
+    num_mesa = 3
+    sistema_restaurante.asignar_mesa(num_mesa, num_personas)
 
-    if monto > total_pedido:
-        vuelto = monto - total_pedido
-        print(f"Vuelto: {vuelto}")
-    elif monto < total_pedido:
-        print("Monto insuficiente. Ingrese un valor igual o mayor al total del pedido.")
-        monto = int(input("Ingrese el monto del pago: "))
-        if monto >= total_pedido:
-            vuelto = monto - total_pedido
-            print(f"Vuelto: {vuelto}")
-        else:
-            print("Monto insuficiente. Pago cancelado.")
-    else:
-        print("Pago exacto. Gracias por su compra.")
+    # Generar informe de ventas
+    sistema_restaurante.generar_informe_ventas()
 
-    restaurante.procesar_pago(cliente, monto)
+    # Realizar un pedido
+    sistema_restaurante.realizar_pedido()
 
 
-restaurante = RestauranteFacade()
-realizar_pedido_y_pago(restaurante)
+if __name__ == '__main__':
+    main()
