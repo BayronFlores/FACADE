@@ -52,6 +52,7 @@ menus = {
             })
         }
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# Subsistema
 class Pedidos:
     def recibir_pedido_en_restaurante(self):
 
@@ -98,6 +99,7 @@ class Pedidos:
         print("Total a pagar: $", total)
         return pedido, total
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# Subsistemas
 class Pagos:
     def procesar_pago(self, total):
         while True:
@@ -109,18 +111,22 @@ class Pagos:
                 print("Pago exitoso. Su cambio es: $", cambio)
                 break
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# Subsistemas
 class Reservas:
     def hacer_reserva(self, fecha, hora, num_personas):
         print(f"Haciendo reserva para {num_personas} personas el {fecha} a las {hora}")
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# Subsistemas
 class Inventario:
     def actualizar_inventario(self, producto, cantidad):
         print(f"Actualizando inventario: {producto} - {cantidad} unidades")
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# Subsistemas
 class Mesas:
     def asignar_mesa(self, num_mesa, num_personas):
         print(f"Asignando mesa {num_mesa} para {num_personas} personas")
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# Subsistemas
 class InformesVentas:
     def generar_informe_ventas(self):
         print("Generando informe de ventas en tiempo real")
