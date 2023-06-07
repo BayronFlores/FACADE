@@ -1,67 +1,70 @@
-# # Subsistemas
-
-productos = {
-    "comida": {
-        "1": ("Pizza Margherita", 3000),
-        "2": ("Hamburguesa", 3500),
-    },
-    "ensalada": {
-        "3": ("Ensalada César", 2500),
-        "4": ("Ensalada Caprese", 2800),
-    },
-    "postre": {
-        "5": ("Pastel de Chocolate", 3500),
-        "6": ("Helado", 2000),
-    },
-    "bebida": {
-        "7": ("Refresco", 1000),
-        "8": ("Agua Mineral", 500),
-    }
-}
-
-
-
 class Pedidos:
     def recibir_pedido(self):
-        print("¡Bienvenido! Por favor, seleccione una categoría:")
-        
-        categorias = list(productos.keys())
+        print("¡Bienvenido al menu! Por favor, seleccione los productos:")
 
-        for i, categoria in enumerate(categorias, 1):
-            print(f"{i}. {categoria.capitalize()}")
-
-        while True:
-            opcion_categoria = input("Ingrese el número de la categoría: ")
-            if opcion_categoria.isdigit() and 1 <= int(opcion_categoria) <= len(categorias):
-                categoria_elegida = categorias[int(opcion_categoria) - 1]
-                break
-            else:
-                print("¡Opción inválida!")
-
-        print(f"\nProductos de la categoría {categoria_elegida.capitalize()}:")
-        productos_categoria = productos[categoria_elegida]
-        for codigo, (producto, valor) in productos_categoria.items():
-            print(f"{codigo}. {producto} - ${valor}")
+        categorias = {
+            "1": ("Comida", {
+                "1": ("Pizza Margherita", 3000),
+                "2": ("Hamburguesa", 3500),
+                "3": ("Pasta", 2800)
+            }),
+            "2": ("Ensalada", {
+                "1": ("Ensalada César", 2500),
+                "2": ("Ensalada Caprese", 2200),
+                "3": ("Ensalada Mixta", 2000)
+            }),
+            "3": ("Postre", {
+                "1": ("Tarta de Manzana", 1800),
+                "2": ("Helado", 1500),
+                "3": ("Flan", 1200)
+            }),
+            "4": ("Bebidas", {
+                "1": ("Refresco", 1000),
+                "2": ("Agua Mineral", 800),
+                "3": ("Jugo Natural", 1200)
+            })
+        }
 
         pedido = []
         total = 0
 
         while True:
-            opcion = input("Ingrese el código del producto (0 para finalizar el pedido, S para seleccionar otra categoría): ")
-            if opcion == "0":
-                break
-            elif opcion.lower() == "s":
-                return self.recibir_pedido()
-            elif opcion in productos_categoria:
-                pedido.append(productos_categoria[opcion][0])
-                total += productos_categoria[opcion][1]
-            else:
-                print("¡Opción inválida!")
+            print("\nCategorías:")
+            for codigo, (categoria, _) in categorias.items():
+                print(f"{codigo}. {categoria}")
 
-        print("Pedido realizado:", pedido)
+            categoria_opcion = input("Ingrese el código de la categoría (0 para finalizar el pedido total): ")
+            if categoria_opcion == "0":
+                break
+            elif categoria_opcion not in categorias:
+                print("¡Categoría inválida!")
+                continue
+
+            _, productos = categorias[categoria_opcion]
+
+            print("\nProductos:")
+            for codigo, (producto, valor) in productos.items():
+                print(f"{codigo}. {producto} - ${valor}")
+
+            while True:
+                opcion = input("Ingrese el código del producto (0 para finalizar la categoría, 'exit' para finalizar el pedido total): ")
+                if opcion == "0":
+                    break
+                elif opcion == "exit":
+                    print("\nPedido realizado:", pedido)
+                    print("Total a pagar: $", total)
+                    return pedido, total
+                elif opcion in productos:
+                    pedido.append(productos[opcion][0])
+                    total += productos[opcion][1]
+                else:
+                    print("¡Opción inválida!")
+
+        print("\nPedido realizado:", pedido)
         print("Total a pagar: $", total)
         return pedido, total
-"-------------------------------------------------------------------------------------------------"
+    
+    
 class Pagos:
     def procesar_pago(self, total):
         monto_ingresado = int(input("Ingrese el monto a pagar: $"))
@@ -72,24 +75,25 @@ class Pagos:
             print("Pago exitoso. Su cambio es: $", cambio)
         else:
             print("Pago exitoso. No hay cambio.")
-"-------------------------------------------------------------------------------------------------"
+
 class Reservas:
     def hacer_reserva(self, fecha, hora, num_personas):
         print(f"Haciendo reserva para {num_personas} personas el {fecha} a las {hora}")
-"-------------------------------------------------------------------------------------------------"
+
 class Inventario:
     def actualizar_inventario(self, producto, cantidad):
         print(f"Actualizando inventario: {producto} - {cantidad} unidades")
-"-------------------------------------------------------------------------------------------------"
+
 class Mesas:
     def asignar_mesa(self, num_mesa, num_personas):
         print(f"Asignando mesa {num_mesa} para {num_personas} personas")
-"-------------------------------------------------------------------------------------------------"
+
 class InformesVentas:
     def generar_informe_ventas(self):
         print("Generando informe de ventas en tiempo real")
-"-------------------------------------------------------------------------------------------------"
+
 # Fachada
+
 class SistemaRestauranteFacade:
     def __init__(self):
         self.pedidos = Pedidos()
@@ -114,31 +118,44 @@ class SistemaRestauranteFacade:
 
     def generar_informe_ventas(self):
         self.informes_ventas.generar_informe_ventas()
-"-------------------------------------------------------------------------------------------------"
+
 # Uso del sistema
+
 def main():
     sistema_restaurante = SistemaRestauranteFacade()
 
-    # Hacer una reserva
-    fecha = "2023-06-07"
-    hora = "19:00"
-    num_personas = 4
-    sistema_restaurante.hacer_reserva(fecha, hora, num_personas)
+    while True:
+        print("\nCategorías:")
+        print("1. Pedido")
+        print("2. Reserva")
+        print("3. Inventario")
+        print("4. Mesas")
+        print("0. Salir")
 
-    # Actualizar el inventario
-    producto = "Tomate"
-    cantidad = 10
-    sistema_restaurante.actualizar_inventario(producto, cantidad)
+        opcion = input("Ingrese el número de la categoría (0 para salir): ")
 
-    # Asignar una mesa
-    num_mesa = 3
-    sistema_restaurante.asignar_mesa(num_mesa, num_personas)
+        if opcion == "1":
+            sistema_restaurante.realizar_pedido()
+        elif opcion == "2":
+            fecha = input("Ingrese la fecha de la reserva (formato YYYY-MM-DD): ")
+            hora = input("Ingrese la hora de la reserva: ")
+            num_personas = int(input("Ingrese el número de personas: "))
+            sistema_restaurante.hacer_reserva(fecha, hora, num_personas)
+        elif opcion == "3":
+            producto = input("Ingrese el nombre del producto: ")
+            cantidad = int(input("Ingrese la cantidad a actualizar: "))
+            sistema_restaurante.actualizar_inventario(producto, cantidad)
+        elif opcion == "4":
+            num_mesa = int(input("Ingrese el número de mesa: "))
+            num_personas = int(input("Ingrese el número de personas: "))
+            sistema_restaurante.asignar_mesa(num_mesa, num_personas)
+        elif opcion == "0":
+            break
+        else:
+            print("¡Opción inválida!")
 
-    # Generar informe de ventas
-    sistema_restaurante.generar_informe_ventas()
+    print("Saliendo del sistema...")
 
-    # Realizar un pedido
-    sistema_restaurante.realizar_pedido()
 
 if __name__ == '__main__':
     main()
