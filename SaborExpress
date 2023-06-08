@@ -103,13 +103,20 @@ class Pedidos:
 class Pagos:
     def procesar_pago(self, total):
         while True:
-            monto_ingresado = int(input("Ingrese el monto a pagar: $"))
-            if monto_ingresado < total:
-                print("¡Monto insuficiente!")
-            elif monto_ingresado > total:
-                cambio = monto_ingresado - total
-                print("Pago exitoso. Su cambio es: $", cambio)
-                break
+            try:
+                monto_ingresado = int(input("Ingrese el monto a pagar: $"))
+                if monto_ingresado < total:
+                    print("¡Monto insuficiente!")
+                elif monto_ingresado > total:
+                    cambio = monto_ingresado - total
+                    print("Pago exitoso. Su cambio es: $", cambio)
+                    break
+                else:
+                    print("Pago exitoso. No hay cambio.")
+                    break
+            except ValueError:
+                print("Error: Ingrese un monto válido.")
+
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 # Subsistemas
 class Reservas:
@@ -162,40 +169,43 @@ def main():
     sistema_restaurante = SistemaRestaurante()
 
     while True:
-        print("\nCategorías:")
-        print("◤-------------------------------◥")
-        print("---( 1 ). Realizar Pedido")
-        print("---( 2 ). Hacer Reserva")
-        print("---( 3 ). Actualizar Inventario")
-        print("---( 4 ). Asignar Mesas")
-        print("---( 0 ). Salir")
-        print("◣-------------------------------◢")
+        try:
+            print("\nCategorías:")
+            print("◤-------------------------------◥")
+            print("---( 1 ). Realizar Pedido")
+            print("---( 2 ). Hacer Reserva")
+            print("---( 3 ). Actualizar Inventario")
+            print("---( 4 ). Asignar Mesas")
+            print("---( 0 ). Salir")
+            print("◣-------------------------------◢")
 
-        opcion = input("Ingrese el número de la categoría (0 para salir): ")
+            opcion = input("Ingrese el número de la categoría (0 para salir): ")
 
-        if opcion == "1":
-            sistema_restaurante.realizar_pedido_en_restaurante()
+            if opcion == "1":
+                sistema_restaurante.realizar_pedido_en_restaurante()
 
-        elif opcion == "2":
-            fecha = input("Ingrese la fecha de la reserva (formato YYYY-MM-DD): ")
-            hora = input("Ingrese la hora de la reserva: ")
-            num_personas = int(input("Ingrese el número de personas: "))
-            sistema_restaurante.hacer_reserva(fecha, hora, num_personas)
+            elif opcion == "2":
+                fecha = input("Ingrese la fecha de la reserva (formato YYYY-MM-DD): ")
+                hora = input("Ingrese la hora de la reserva: ")
+                num_personas = int(input("Ingrese el número de personas: "))
+                sistema_restaurante.hacer_reserva(fecha, hora, num_personas)
 
-        elif opcion == "3":
-            producto = input("Ingrese el nombre del producto: ")
-            cantidad = int(input("Ingrese la cantidad a actualizar: "))
-            sistema_restaurante.actualizar_inventario(producto, cantidad)
+            elif opcion == "3":
+                producto = input("Ingrese el nombre del producto: ")
+                cantidad = int(input("Ingrese la cantidad a actualizar: "))
+                sistema_restaurante.actualizar_inventario(producto, cantidad)
 
-        elif opcion == "4":
-            num_mesa = int(input("Ingrese el número de mesa: "))
-            num_personas = int(input("Ingrese el número de personas: "))
-            sistema_restaurante.asignar_mesa(num_mesa, num_personas)
+            elif opcion == "4":
+                num_mesa = int(input("Ingrese el número de mesa: "))
+                num_personas = int(input("Ingrese el número de personas: "))
+                sistema_restaurante.asignar_mesa(num_mesa, num_personas)
 
-        elif opcion == "0":
-            break
-        else:
-            print("¡Opción inválida!")
+            elif opcion == "0":
+                break
+            else:
+                print("¡Opción inválida!")
+        except ValueError:
+            print("Error: Ingrese un valor numérico válido.")
 
     print("Saliendo del sistema...")
 #///////////////////////////////////////////////////////////////////////////////////////////////////////////////
